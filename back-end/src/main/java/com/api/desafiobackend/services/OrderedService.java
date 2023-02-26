@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -25,8 +26,9 @@ public class OrderedService {
     }
 
     public Ordered saveOrdered(OrderedDTO o) {
-        List<Product> products = o.getProducts().stream().map(name -> this.preloadTagByCode(name))
-                .collect(Collectors.toList());
+
+        Set<Product> products = o.getProducts().stream().map(name -> this.preloadTagByCode(name))
+                .collect(Collectors.toSet());
         System.out.println(products);
         Ordered newOrdered = new Ordered(o.getDescription(), products);
         return orderedRepository.save(newOrdered);

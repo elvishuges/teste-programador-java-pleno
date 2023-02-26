@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +39,7 @@ public class Product implements Serializable {
     private String unit;
     private double value;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinTable(name = "ordered_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "ordered_id"))
     private List<Ordered> ordered;

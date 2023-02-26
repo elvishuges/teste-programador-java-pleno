@@ -20,12 +20,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -50,15 +52,23 @@ public class Ordered implements Serializable {
     @ManyToMany
     @JoinTable(name = "ordered_product", joinColumns = @JoinColumn(name = "ordered_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     @JsonManagedReference
-    private List<Product> products;
+    private Set<Product> products;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
     // Constructor
-    public Ordered(String description, List<Product> products) {
+    public Ordered(String description, Set<Product> products) {
         this.description = description;
         this.products = products;
     }
 
     public Ordered() {
+    }
+
+    public void addProduct(Product prod) {
+        this.products.add(prod);
     }
 
     // Getters and Setters
