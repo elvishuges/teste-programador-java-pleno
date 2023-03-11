@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: "IndexPagedd",
+  name: "IndexPage",
 };
 </script>
