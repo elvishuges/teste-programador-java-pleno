@@ -25,7 +25,7 @@ import com.api.desafiobackend.models.*;
 import com.api.desafiobackend.entity.*;
 import com.api.desafiobackend.repository.*;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class ProductController {
