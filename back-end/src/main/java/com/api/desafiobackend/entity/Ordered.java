@@ -54,8 +54,8 @@ public class Ordered implements Serializable {
     @JsonManagedReference
     private Set<Product> products;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "client_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "client_id", nullable = true)
     private Client client;
 
     // Constructor

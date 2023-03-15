@@ -27,9 +27,8 @@ public class OrderedService {
 
     public Ordered saveOrdered(OrderedDTO o) {
 
-        Set<Product> products = o.getProducts().stream().map(name -> this.preloadTagByCode(name))
+        Set<Product> products = o.getProducts().stream().map(code -> this.preloadTagByCode(code))
                 .collect(Collectors.toSet());
-        System.out.println(products);
         Ordered newOrdered = new Ordered(o.getDescription(), products);
         return orderedRepository.save(newOrdered);
     }
