@@ -10,7 +10,13 @@ const apiProducts = axios.create({
 });
 
 export default {
+  getProduct(id) {
+    return apiProducts.get(`/product/${id}`);
+  },
   getProducts() {
     return apiProducts.get("/products");
+  },
+  deleteProduct(id) {
+    return apiProducts.delete(`/product/${id}`);
   },
 };

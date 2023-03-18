@@ -39,7 +39,6 @@ public class OrderedController {
     @GetMapping("/ordereds")
     public ResponseEntity<?> getAllOrdereds() {
         List<Ordered> ordereds = orderedService.findAll();
-
         return new ResponseEntity<Object>(ordereds, HttpStatus.OK);
     }
 

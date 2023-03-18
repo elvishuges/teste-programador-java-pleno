@@ -42,7 +42,7 @@ public class Product implements Serializable {
     @PrePersist
     public void gerarCodigo() {
         Random random = new Random();
-        long randomCode = random.nextInt(0, 100000);
+        long randomCode = random.nextInt(100000);
         this.code = randomCode;
     }
 
