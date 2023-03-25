@@ -16,7 +16,13 @@ export default {
   getProducts() {
     return apiProducts.get("/products");
   },
+  editProduct(id, productData) {
+    return apiProducts.put(`/product/${id}`, productData);
+  },
   deleteProduct(id) {
     return apiProducts.delete(`/product/${id}`);
+  },
+  createProduct(product) {
+    return apiProducts.post("/product", product);
   },
 };

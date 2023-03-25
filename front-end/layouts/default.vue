@@ -1,7 +1,7 @@
 <template>
   <div class="default-page bg-gray-100">
     <Nav />
-    <Nuxt />
+    <div class="nuxt"><Nuxt /></div>
   </div>
 </template>
 
@@ -14,4 +14,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.nuxt {
+  padding: 20px;
+}
+</style>

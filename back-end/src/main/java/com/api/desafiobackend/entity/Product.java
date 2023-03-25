@@ -35,9 +35,11 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     @Column(unique = true)
     private long code;
+    private String description;
+    private String unit;
+    private double value;
 
     @PrePersist
     public void gerarCodigo() {
@@ -45,10 +47,6 @@ public class Product implements Serializable {
         long randomCode = random.nextInt(100000);
         this.code = randomCode;
     }
-
-    private String description;
-    private String unit;
-    private double value;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference

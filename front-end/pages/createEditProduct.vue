@@ -1,56 +1,58 @@
 <template>
-  <div>
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+  <div class="form-product">
+    <b-form @submit="onSubmit">
       <b-form-group
         id="input-group-1"
-        label="Email address:"
+        label="Código:"
         label-for="input-1"
-        description="We'll never share your email with anyone else."
+        v-if="editing"
       >
         <b-form-input
           id="input-1"
-          v-model="form.email"
-          type="email"
-          placeholder="Enter email"
-          required
+          v-model="product.code"
+          disabled
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
+      <b-form-group id="input-group-2" label="Descrição" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="form.name"
-          placeholder="Enter name"
+          v-model="product.description"
+          placeholder="Descrição do Produto"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group id="input-group-3" label="Unideda:" label-for="input-3">
+        <b-form-input
+          id="input-3"
+          v-model="product.unit"
+          placeholder="Unidades"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group id="input-group-4" label="Valor:" label-for="input-4">
+        <b-form-input
+          id="input-4"
+          v-model="product.value"
+          placeholder="Valor"
           required
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-3" label="Food:" label-for="input-3">
-        <b-form-select
-          id="input-3"
-          v-model="form.food"
-          :options="foods"
-          required
-        ></b-form-select>
-      </b-form-group>
-
-      <b-form-group id="input-group-4" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          v-model="form.checked"
-          id="checkboxes-4"
-          :aria-describedby="ariaDescribedby"
-        >
-          <b-form-checkbox value="me">Check me out</b-form-checkbox>
-          <b-form-checkbox value="that">Check that out</b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" variant="primary">{{
+        submitButtonText
+      }}</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
-    <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ form }}</pre>
-    </b-card>
+    <b-alert
+      :show="dismissCountDown"
+      dismissible
+      fade
+      variant="warning"
+      @dismiss-count-down="countDownChanged"
+    >
+      Produco Atualizado com Sucesso
+    </b-alert>
   </div>
 </template>
 
@@ -59,49 +61,90 @@ import ProductService from "./../services/ProductService";
 export default {
   data() {
     return {
-      form: {
-        email: "",
-        name: "",
-        food: null,
-        checked: [],
+      product: {
+        description: "",
+        unit: "",
+        value: null,
+        code: "",
       },
-      foods: [
-        { text: "Select One", value: null },
-        "Carrots",
-        "Beans",
-        "Tomatoes",
-        "Corn",
-      ],
+      editing: false,
+
       show: true,
+
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showDismissibleAlert: false,
+      alertMessage: "",
     };
   },
   async asyncData({ params, $http }) {
+    // método chamado antes de inicializar o component
     if (params.id) {
-      const product = await ProductService.getProduct(params.id);
-      return { product };
+      const { data: product } = await ProductService.getProduct(params.id);
+      return {
+        editing: true,
+        product,
+      };
     }
   },
 
-  methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      alert(JSON.stringify(this.form));
+  computed: {
+    submitButtonText() {
+      return this.editing ? "Editar" : "Cadastrar";
     },
-    onReset(event) {
+  },
+  methods: {
+    async onSubmit(event) {
+      alert(JSON.stringify(this.product));
       event.preventDefault();
-      // Reset our form values
-      this.form.email = "";
-      this.form.name = "";
-      this.form.food = null;
-      this.form.checked = [];
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
+      if (this.editing) {
+        await this.updateProduct();
+      } else {
+        this.createProduct();
+      }
+    },
+
+    async updateProduct() {
+      try {
+        await ProductService.editProduct(this.product.id, this.product);
+        this.cleanProductInfos();
+        this.showAlert("Produto Editado com Sucesso");
+        this.editing = false;
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async createProduct() {
+      try {
+        let productPost = this.product;
+        delete productPost.code;
+        await ProductService.createProduct(this.product);
+        this.cleanProductInfos();
+        this.showAlert("Produto Criado com Sucesso");
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    cleanProductInfos() {
+      this.product = {
+        description: "",
+        unit: "",
+        value: null,
+        code: "",
+      };
+    },
+    showAlert(message) {
+      this.alertMessage = message;
+      this.dismissCountDown = this.dismissSecs;
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.form-product {
+}
+</style>
