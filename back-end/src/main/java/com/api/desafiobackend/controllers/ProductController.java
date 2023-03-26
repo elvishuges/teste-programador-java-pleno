@@ -17,15 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.PutExchange;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import com.api.desafiobackend.models.*;
 
 import com.api.desafiobackend.entity.*;
-import com.api.desafiobackend.repository.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController

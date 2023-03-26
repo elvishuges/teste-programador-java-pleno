@@ -34,7 +34,8 @@
         <b-form-input
           id="input-4"
           v-model="product.value"
-          placeholder="Valor"
+          v-cleave="cleaveOptions"
+          placeholder="Valor R$"
           required
         ></b-form-input>
       </b-form-group>
@@ -58,6 +59,7 @@
 
 <script>
 import ProductService from "./../services/ProductService";
+
 export default {
   data() {
     return {
@@ -66,6 +68,12 @@ export default {
         unit: "",
         value: null,
         code: "",
+      },
+      cleaveOptions: {
+        numeral: true,
+        numeralDecimalMark: ",",
+        delimiter: ".",
+        delimiterLazyShow: true,
       },
       editing: false,
 
@@ -77,6 +85,7 @@ export default {
       alertMessage: "",
     };
   },
+
   async asyncData({ params, $http }) {
     // método chamado antes de inicializar o component
     if (params.id) {

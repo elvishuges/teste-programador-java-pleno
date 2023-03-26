@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Service
@@ -38,6 +39,11 @@ public class ProductService {
 
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
+
+    }
+
+    public Set<Product> getProductsByOrderId(Long productId) {
+        return productRepository.findByOrderedId(productId);
 
     }
 

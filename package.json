@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "accounting-js": "^1.1.1",
+    "v-money": "^0.8.1",
+    "vue-masked-input": "^0.5.2"
+  }
+}

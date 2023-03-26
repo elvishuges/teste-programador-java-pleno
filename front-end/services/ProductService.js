@@ -1,28 +1,19 @@
-import axios from "axios";
-
-const apiProducts = axios.create({
-  baseURL: `http://localhost:8080/api`,
-  whithCredentials: false,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import api from "~/plugins/axios";
 
 export default {
   getProduct(id) {
-    return apiProducts.get(`/product/${id}`);
+    return api.get(`/product/${id}`);
   },
   getProducts() {
-    return apiProducts.get("/products");
+    return api.get("/products");
   },
   editProduct(id, productData) {
-    return apiProducts.put(`/product/${id}`, productData);
+    return api.put(`/product/${id}`, productData);
   },
   deleteProduct(id) {
-    return apiProducts.delete(`/product/${id}`);
+    return api.delete(`/product/${id}`);
   },
   createProduct(product) {
-    return apiProducts.post("/product", product);
+    return api.post("/product", product);
   },
 };
