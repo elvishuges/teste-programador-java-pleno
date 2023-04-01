@@ -1,15 +1,15 @@
 <template>
-  <div class="form-product">
+  <div class="form-ordered">
     <b-form @submit="onSubmit">
       <b-form-group
         id="input-group-1"
-        label="Código:"
+        label="Número:"
         label-for="input-1"
         v-if="editing"
       >
         <b-form-input
           id="input-1"
-          v-model="product.code"
+          v-model="ordered.number"
           disabled
         ></b-form-input>
       </b-form-group>
@@ -17,28 +17,22 @@
       <b-form-group id="input-group-2" label="Descrição" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="product.description"
+          v-model="ordered.description"
           placeholder="Descrição do Produto"
           required
         ></b-form-input>
       </b-form-group>
-      <b-form-group id="input-group-3" label="Unideda:" label-for="input-3">
-        <b-form-input
-          id="input-3"
-          v-model="product.unit"
-          placeholder="Unidades"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-4" label="Valor:" label-for="input-4">
-        <b-form-input
-          id="input-4"
-          v-model="product.value"
-          v-cleave="cleaveOptions"
-          placeholder="Valor R$"
-          required
-        ></b-form-input>
-      </b-form-group>
+
+      <div>
+        <b-form-select
+          v-model="ordered.products"
+          :options="products"
+          value-field="code"
+          text-field="description"
+          multiple
+        ></b-form-select>
+        {{ ordered.products }}
+      </div>
 
       <b-button type="submit" variant="primary">{{
         submitButtonText
@@ -58,17 +52,20 @@
 </template>
 
 <script>
+import OrderedService from "./../services/OrderedService";
 import ProductService from "./../services/ProductService";
 
 export default {
   data() {
     return {
-      product: {
+      ordered: {
+        number: null,
         description: "",
-        unit: "",
-        value: null,
-        code: "",
+        products: [],
+        client: null,
       },
+      products: [],
+      productOptions: [],
       cleaveOptions: {
         numeral: true,
         numeralDecimalMark: ",",
@@ -89,10 +86,27 @@ export default {
   async asyncData({ params, $http }) {
     // método chamado antes de inicializar o component
     if (params.id) {
-      const { data: product } = await ProductService.getProduct(params.id);
+      const options = {
+        viewProducts: true,
+      };
+      const { data: ordered } = await OrderedService.getOrdered(
+        params.id,
+        options
+      );
+
+      ordered.products = ordered.products.map((p) => p.code);
+      const { data: products } = await ProductService.getProducts();
+
       return {
         editing: true,
-        product,
+        ordered,
+        products,
+      };
+    } else {
+      const { data: products } = await ProductService.getProducts();
+      return {
+        editing: false,
+        products,
       };
     }
   },
@@ -104,30 +118,30 @@ export default {
   },
   methods: {
     async onSubmit(event) {
-      alert(JSON.stringify(this.product));
+      alert(JSON.stringify(this.ordered));
       event.preventDefault();
       if (this.editing) {
-        await this.updateProduct();
+        await this.updateOrdered();
       } else {
-        this.createProduct();
+        this.createOrdered();
       }
     },
 
-    async updateProduct() {
+    async updateOrdered() {
       try {
-        await ProductService.editProduct(this.product.id, this.product);
+        await OrderedService.editOrdered(this.ordered.id, this.ordered);
         this.cleanProductInfos();
-        this.showAlert("Produto Editado com Sucesso");
+        this.showAlert("Pedido Editado com Sucesso");
         this.editing = false;
       } catch (error) {
         console.log("error", error);
       }
     },
-    async createProduct() {
+    async createOrdered() {
       try {
-        let productPost = this.product;
-        delete productPost.code;
-        await ProductService.createProduct(this.product);
+        let orderedPost = this.ordered;
+        delete orderedPost.code;
+        await OrderedService.createOrdered(this.ordered);
         this.cleanProductInfos();
         this.showAlert("Produto Criado com Sucesso");
       } catch (error) {
@@ -135,10 +149,10 @@ export default {
       }
     },
     cleanProductInfos() {
-      this.product = {
+      this.ordered = {
         description: "",
         unit: "",
-        value: 0,
+        value: null,
         code: "",
       };
     },
@@ -153,7 +167,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.form-product {
-}
-</style>
+<style scoped></style>

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="actions">
+      <div></div>
+      <b-button @click="toggleCreate">Cadastrar</b-button>
+    </div>
     <b-table :items="products" :fields="fields" striped responsive="sm">
       <template #cell(actions)="row">
         <b-button size="sm" @click="toggleEdit(row.item)" class="mr-2">
@@ -33,6 +37,9 @@ export default {
     toggleEdit(item) {
       this.$router.push({ name: "createEditProduct", params: { id: item.id } });
     },
+    toggleCreate() {
+      this.$router.push({ name: "createEditProduct" });
+    },
     async deleteItem(item) {
       try {
         await ProductService.deleteProduct(item.id);
@@ -43,7 +50,6 @@ export default {
     },
     async loadProducts() {
       const products = await ProductService.getProducts();
-      console.log("pr", products);
       this.products = products.data;
     },
     onDeleteItemClick(item) {
@@ -71,3 +77,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+</style>

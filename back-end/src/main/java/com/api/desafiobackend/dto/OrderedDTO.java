@@ -9,6 +9,8 @@ import java.util.List;
 @Getter
 public class OrderedDTO {
     private String description;
+    private Long number;
+    private Long id;
     private List<String> products;
 
 }

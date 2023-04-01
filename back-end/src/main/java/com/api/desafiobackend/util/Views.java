@@ -1,10 +1,9 @@
 package com.api.desafiobackend.util;
 
 public class Views {
-    public static class Public {
+    public static class OrderedSummary {
     }
 
-    public static class Private extends Public {
+    public static class OrderedWithProducts extends OrderedSummary {
     }
-
 }

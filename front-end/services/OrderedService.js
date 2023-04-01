@@ -1,19 +1,19 @@
 import apiOrdereds from "~/plugins/axios";
 
 export default {
-  getOrdereds(id) {
+  getOrdered(id) {
     return apiOrdereds.get(`/ordered/${id}`);
   },
-  getOrdereds() {
-    return apiOrdereds.get("/ordereds");
+  getOrdereds(options) {
+    return apiOrdereds.get(`/ordereds`, { params: options });
   },
-  editOrdereds(id, orderedData) {
+  editOrdered(id, orderedData) {
     return apiOrdereds.put(`/ordered/${id}`, orderedData);
   },
-  deleteOrdereds(id) {
+  deleteOrdered(id) {
     return apiOrdereds.delete(`/ordered/${id}`);
   },
-  createOrdereds(ordered) {
+  createOrdered(ordered) {
     return apiOrdereds.post("/ordered", ordered);
   },
 };

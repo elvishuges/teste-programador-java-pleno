@@ -7,9 +7,11 @@ import java.time.LocalDate;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import com.api.desafiobackend.util.Views;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -50,8 +52,9 @@ public class Ordered implements Serializable {
 
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name = "ordered_product", joinColumns = @JoinColumn(name = "ordered_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JsonView(Views.OrderedWithProducts.class)
     private Set<Product> products;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
