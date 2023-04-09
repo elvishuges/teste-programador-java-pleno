@@ -3,7 +3,6 @@ package com.api.desafiobackend.entity;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
