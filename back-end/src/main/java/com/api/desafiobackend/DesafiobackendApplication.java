@@ -26,9 +26,4 @@ public class DesafiobackendApplication {
 		};
 	}
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-
 }

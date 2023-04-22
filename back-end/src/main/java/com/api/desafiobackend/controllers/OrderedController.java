@@ -32,8 +32,6 @@ import com.api.desafiobackend.entity.*;
 @RestController
 @RequestMapping("/api")
 public class OrderedController {
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     OrderedService orderedService;

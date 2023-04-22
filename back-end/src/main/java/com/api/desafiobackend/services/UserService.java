@@ -21,9 +21,10 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(String.format("User Service, %s!", username));
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
+        System.out.println(String.format("User Founded, %s!", user));
         // esse Objecto User é do spring Secutiry
         return UserDetailsImpl.build(user);
     }
