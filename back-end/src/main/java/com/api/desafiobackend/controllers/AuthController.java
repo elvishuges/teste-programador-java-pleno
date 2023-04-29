@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import com.api.desafiobackend.configs.security.JwtUtils;
-import com.api.desafiobackend.entity.Role;
 import com.api.desafiobackend.entity.User;
 import com.api.desafiobackend.payload.request.LoginRequest;
 import com.api.desafiobackend.payload.request.SignupRequest;
@@ -47,7 +44,7 @@ public class AuthController {
         @Autowired
         PasswordEncoder encoder;
 
-        @PostMapping(value = "/auth")
+        @PostMapping(value = "/signin")
         public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
                 System.out.println(String.format("Auth, %s!", loginRequest.getUsername()));
                 Authentication authentication = authenticationManager.authenticate(
